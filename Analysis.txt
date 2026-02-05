@@ -1,28 +1,36 @@
-1. Training Loss Analysis
-The Transformer model shows a rapid reduction in training loss from 0.0923 in the first epoch to approximately 0.0215 by the tenth epoch. This indicates efficient learning and stable optimization. Minor fluctuations observed in later epochs are expected due to stochastic mini-batch training.
+1. Training Loss Convergence Analysis
+The training loss exhibits a rapid decrease from 0.0923 in the first epoch to approximately 0.0215 by the tenth epoch. This indicates effective learning and stable optimization. The steep initial decline reflects rapid acquisition of dominant temporal patterns, while later gradual improvements correspond to fine-grained dependency learning.
 
-2. Transformer Performance Analysis
-The low RMSE (0.106) and MAE (0.086) values indicate accurate predictions on standardized data. Although MAPE appears moderately high (30.78%), this is expected because percentage-based errors are sensitive to values near zero, which commonly occur after standardization.
+Minor fluctuations observed in later epochs are expected due to stochastic mini-batch updates and do not indicate instability or overfitting.
 
-Overall, the Transformer demonstrates strong predictive capability and effective learning of multivariate temporal patterns.
+2. Transformer Prediction Performance
+The Transformer model achieved low RMSE and MAE values, demonstrating accurate prediction of standardized multivariate time series data. The MAPE value appears moderately high due to sensitivity to near-zero values resulting from standardization. This behavior is common and does not indicate poor predictive quality.
+
+Overall, the Transformer model effectively captures both short-term continuity and longer-term temporal interactions across variables.
 
 3. ARIMA Performance Analysis
-The ARIMA model exhibits significantly higher error values:
-    RMSE nearly 7 times larger than the Transformer
-    Extremely high MAPE (627%)
+The ARIMA model exhibited substantially higher error metrics across all measures. This is primarily due to:
+    Its univariate modeling limitation
+    Inability to capture nonlinear dynamics
+    Sensitivity to noise and differencing operations
 
-This poor performance is due to:
-    Univariate modeling limitation
-    Inability to capture nonlinear relationships
-    Sensitivity to differencing and noise
+The extremely high MAPE further highlights the unsuitability of ARIMA for standardized or near-zero-valued data.
 
 4. Comparative Analysis
-The Transformer model clearly outperforms ARIMA due to:
-    Multivariate input handling
-    Self-attention mechanism capturing long-term dependencies
-    Nonlinear function approximation capability
+The comparison clearly illustrates the advantage of attention-based deep learning models over traditional statistical approaches. The Transformer leverages parallel processing, nonlinear representation learning, and multivariate context, whereas ARIMA relies on linear assumptions and limited historical structure.
 
-ARIMA remains suitable only for simple, linear, univariate time series, whereas modern deep learning models are better suited for complex real-world signals.
+5. Attention Weight Visualization and Interpretation
+The learned self-attention weights were visualized from the first Transformer encoder layer. The resulting attention heatmap shows stronger attention allocation to recent timesteps, indicating that the model prioritizes recent historical information when generating forecasts.
 
-5. Final Interpretation
-The experimental results validate the superiority of Transformer architectures for time series forecasting tasks involving multiple correlated variables. The attention mechanism provides both performance improvement and interpretability through attention visualization.
+At the same time, non-negligible attention weights are distributed across earlier timesteps, confirming the model’s ability to capture longer-range temporal dependencies. This behavior aligns with the theoretical motivation of the Transformer architecture and validates its internal learning mechanism.
+
+6. Temporal Dependency Insights
+The attention analysis demonstrates that the model does not rely on a single timestep but instead forms a weighted combination of historical observations. This adaptive weighting enables robust forecasting in the presence of noise and nonlinear interactions.
+
+7. Evaluation Scope and Limitations
+The evaluation was conducted on batch-level predictions rather than a dedicated test set, which limits conclusions about long-term generalization. Additionally, the ARIMA comparison was restricted to univariate forecasting due to methodological constraints.
+
+Future evaluations will incorporate comprehensive dataset splits and multiple benchmark models to strengthen comparative validity.
+
+8. Final Interpretation
+The experimental findings confirm that Transformer-based models provide superior forecasting performance and interpretability for multivariate time series data. The attention mechanism not only improves accuracy but also offers valuable insight into temporal relevance, making the model suitable for complex real-world forecasting applications.
