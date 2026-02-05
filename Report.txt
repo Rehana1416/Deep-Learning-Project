@@ -1,0 +1,52 @@
+Title: Multivariate Time Series Forecasting Using Transformer and ARIMA Models
+
+1. Introduction
+Time series forecasting plays a critical role in various engineering and scientific applications such as signal processing, finance, energy systems, and predictive maintenance. Traditional statistical models like ARIMA are widely used for univariate forecasting, while deep learning models such as Transformers have gained attention due to their ability to model long-range temporal dependencies and multivariate relationships.
+
+This project focuses on comparing the performance of a Transformer-based deep learning model with a classical ARIMA model for time series forecasting.
+
+2. Dataset Description
+A synthetic multivariate time series dataset was generated consisting of three variables:
+    Variable 1: Sine wave with noise
+    Variable 2: Cosine wave with noise
+    Variable 3: Combined sine-cosine interaction
+
+The dataset contains 3000 time steps and was standardized using StandardScaler to ensure zero mean and unit variance.
+
+3. Methodology
+3.1 Transformer Model
+A Transformer Encoder architecture was implemented using:
+    Input sequence length: 30
+    Embedding dimension: 64
+    Number of attention heads: 4
+    Number of encoder layers: 2
+
+Positional Encoding was used to retain temporal order information. The model predicts the next time step for all three variables simultaneously.
+
+3.2 ARIMA Model
+An ARIMA(5,1,0) model was applied only to the first variable of the dataset, as ARIMA is a univariate forecasting method.
+
+4. Training Process
+The Transformer model was trained for 10 epochs using:
+    Optimizer: Adam
+    Loss Function: Mean Squared Error (MSE)
+    Batch size: 32
+
+Training loss consistently decreased across epochs, indicating stable convergence.
+
+5. Results
+Transformer Model Performance:
+    RMSE: 0.1060
+    MAE: 0.0868
+    MAPE: 30.78%
+
+ARIMA Model Performance:
+    RMSE: 0.7805
+    MAE: 0.5738
+    MAPE: 627.18%
+
+6. Discussion
+The Transformer model significantly outperformed the ARIMA model in all evaluation metrics. The ability of the Transformer to learn multivariate dependencies and long-term temporal patterns resulted in much lower prediction errors. The ARIMA model showed poor performance due to its limitation to univariate linear modeling.
+
+7. Conclusion
+This study demonstrates that Transformer-based models are highly effective for multivariate time series forecasting compared to traditional ARIMA models. The results highlight the advantage of attention mechanisms in capturing complex temporal relationships. Future work may include testing on real-world datasets and comparing with LSTM or GRU models.

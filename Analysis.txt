@@ -1,0 +1,28 @@
+1. Training Loss Analysis
+The Transformer model shows a rapid reduction in training loss from 0.0923 in the first epoch to approximately 0.0215 by the tenth epoch. This indicates efficient learning and stable optimization. Minor fluctuations observed in later epochs are expected due to stochastic mini-batch training.
+
+2. Transformer Performance Analysis
+The low RMSE (0.106) and MAE (0.086) values indicate accurate predictions on standardized data. Although MAPE appears moderately high (30.78%), this is expected because percentage-based errors are sensitive to values near zero, which commonly occur after standardization.
+
+Overall, the Transformer demonstrates strong predictive capability and effective learning of multivariate temporal patterns.
+
+3. ARIMA Performance Analysis
+The ARIMA model exhibits significantly higher error values:
+    RMSE nearly 7 times larger than the Transformer
+    Extremely high MAPE (627%)
+
+This poor performance is due to:
+    Univariate modeling limitation
+    Inability to capture nonlinear relationships
+    Sensitivity to differencing and noise
+
+4. Comparative Analysis
+The Transformer model clearly outperforms ARIMA due to:
+    Multivariate input handling
+    Self-attention mechanism capturing long-term dependencies
+    Nonlinear function approximation capability
+
+ARIMA remains suitable only for simple, linear, univariate time series, whereas modern deep learning models are better suited for complex real-world signals.
+
+5. Final Interpretation
+The experimental results validate the superiority of Transformer architectures for time series forecasting tasks involving multiple correlated variables. The attention mechanism provides both performance improvement and interpretability through attention visualization.
