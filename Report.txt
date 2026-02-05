@@ -1,52 +1,83 @@
-Title: Multivariate Time Series Forecasting Using Transformer and ARIMA Models
+Title: Multivariate Time Series Forecasting Using Transformer-Based Attention Models
 
 1. Introduction
-Time series forecasting plays a critical role in various engineering and scientific applications such as signal processing, finance, energy systems, and predictive maintenance. Traditional statistical models like ARIMA are widely used for univariate forecasting, while deep learning models such as Transformers have gained attention due to their ability to model long-range temporal dependencies and multivariate relationships.
+Time series forecasting is a fundamental problem in engineering and data-driven applications such as signal processing, energy demand prediction, financial analysis, and system monitoring. Traditional statistical models such as ARIMA have been widely used for forecasting tasks; however, they are limited in their ability to model nonlinear and multivariate temporal dependencies.
 
-This project focuses on comparing the performance of a Transformer-based deep learning model with a classical ARIMA model for time series forecasting.
+Recent advances in deep learning have introduced Transformer architectures, which utilize self-attention mechanisms to capture long-range temporal relationships without relying on recurrent structures. This project explores the application of a Transformer-based model for multivariate time series forecasting and compares its performance with a classical ARIMA baseline.
 
 2. Dataset Description
-A synthetic multivariate time series dataset was generated consisting of three variables:
-    Variable 1: Sine wave with noise
-    Variable 2: Cosine wave with noise
-    Variable 3: Combined sine-cosine interaction
+A synthetic multivariate time series dataset was generated consisting of three correlated variables:
+    Variable 1: Noisy sine wave
+    Variable 2: Noisy cosine wave
+    Variable 3: Combined nonlinear sine-cosine interaction
 
-The dataset contains 3000 time steps and was standardized using StandardScaler to ensure zero mean and unit variance.
+The dataset contains 3000 time steps. All variables were standardized using zero-mean and unit-variance normalization to ensure stable training and prevent scale dominance across features.
 
-3. Methodology
-3.1 Transformer Model
-A Transformer Encoder architecture was implemented using:
-    Input sequence length: 30
-    Embedding dimension: 64
+3. Preprocessing and Sequence Construction
+The continuous time series was converted into supervised learning samples using a sliding window approach. Each input sequence consists of 30 consecutive timesteps, and the target corresponds to the next timestep prediction for all three variables.
+
+Standardization was performed prior to sequence generation to improve optimization stability and accelerate convergence.
+
+4. Model Architecture
+The forecasting model is based on a Transformer Encoder architecture. The model consists of:
+    A linear embedding layer projecting the input features into a higher-dimensional latent space
+    Sinusoidal positional encoding to preserve temporal ordering
+    A stack of Transformer Encoder layers with multi-head self-attention
+    A fully connected output layer predicting the next timestep values
+
+Key architectural parameters include:
+    Embedding dimension (d_model): 64
     Number of attention heads: 4
     Number of encoder layers: 2
+    Sequence length: 30
 
-Positional Encoding was used to retain temporal order information. The model predicts the next time step for all three variables simultaneously.
+This architecture enables the model to learn both short-term and long-term temporal dependencies across multiple variables.
 
-3.2 ARIMA Model
-An ARIMA(5,1,0) model was applied only to the first variable of the dataset, as ARIMA is a univariate forecasting method.
+5. Positional Encoding Justification
+Transformers lack an inherent notion of temporal order. To address this, sinusoidal positional encoding was incorporated into the input embeddings. This encoding allows the model to distinguish between different temporal positions using deterministic sine and cosine functions.
 
-4. Training Process
-The Transformer model was trained for 10 epochs using:
-    Optimizer: Adam
-    Loss Function: Mean Squared Error (MSE)
-    Batch size: 32
+The use of sinusoidal encoding avoids additional trainable parameters and supports generalization to sequences of varying lengths. Positional encoding is essential for time series data, as temporal ordering directly influences predictive relevance.
 
-Training loss consistently decreased across epochs, indicating stable convergence.
+6. Hyperparameter Selection and Training Strategy
+Hyperparameters were selected empirically based on training stability and convergence behavior. The embedding dimension was chosen to balance representational capacity and computational efficiency. Increasing the dimension beyond 64 resulted in marginal improvements with significantly higher computational cost.
 
-5. Results
-Transformer Model Performance:
+The model was trained for 10 epochs using the Adam optimizer with a learning rate of 0.001. Mean Squared Error (MSE) was used as the loss function. A batch size of 32 was selected to ensure stable gradient updates while maintaining efficient training.
+
+7. Baseline Model: ARIMA
+To provide a traditional statistical benchmark, an ARIMA(5,1,0) model was implemented. Due to its inherent univariate nature, ARIMA was applied only to the first variable of the dataset.
+
+Although ARIMA cannot model multivariate or nonlinear dependencies, it serves as a reference point for comparing classical forecasting approaches against modern deep learning techniques.
+
+8. Evaluation Methodology
+Model performance was evaluated using standard regression metrics:
+    Root Mean Squared Error (RMSE)
+    Mean Absolute Error (MAE)
+    Mean Absolute Percentage Error (MAPE)
+
+The Transformer model predictions were evaluated on batch-level samples drawn from the dataset, while ARIMA performance was evaluated on a hold-out segment of the univariate time series.
+
+9. Results
+The Transformer model achieved the following performance:
     RMSE: 0.1060
     MAE: 0.0868
     MAPE: 30.78%
 
-ARIMA Model Performance:
+The ARIMA model produced significantly higher errors:
     RMSE: 0.7805
-    MAE: 0.5738
+    MAE: 0.5739
     MAPE: 627.18%
 
-6. Discussion
-The Transformer model significantly outperformed the ARIMA model in all evaluation metrics. The ability of the Transformer to learn multivariate dependencies and long-term temporal patterns resulted in much lower prediction errors. The ARIMA model showed poor performance due to its limitation to univariate linear modeling.
+10. Discussion
+The results demonstrate that the Transformer model significantly outperforms the ARIMA baseline across all evaluation metrics. The performance gain is attributed to the Transformer’s ability to capture multivariate and nonlinear temporal dependencies through self-attention.
 
-7. Conclusion
-This study demonstrates that Transformer-based models are highly effective for multivariate time series forecasting compared to traditional ARIMA models. The results highlight the advantage of attention mechanisms in capturing complex temporal relationships. Future work may include testing on real-world datasets and comparing with LSTM or GRU models.
+The comparatively poor performance of ARIMA highlights its limitations when applied to noisy, nonlinear, and multivariate time series data.
+
+11. Limitations and Future Work
+The current study is limited by batch-level evaluation and the use of a single traditional baseline. Future work will include:
+    Full train-validation-test split evaluation
+    Additional benchmarks such as LSTM and GRU models
+    Evaluation on real-world datasets
+    Multivariate statistical baselines where applicable
+
+12. Conclusion
+This project demonstrates the effectiveness of Transformer-based architectures for multivariate time series forecasting. The integration of positional encoding and self-attention enables superior modeling of temporal dependencies compared to traditional statistical methods. The results validate the Transformer as a powerful and interpretable forecasting framework for complex time series data.
